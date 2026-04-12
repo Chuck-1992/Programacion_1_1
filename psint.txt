@@ -1,0 +1,211 @@
+Funcion validar_digito <- EsDigito(caracter)
+    Segun caracter Hacer
+        "0","1","2","3","4","5","6","7","8","9":
+            validar_digito <- Verdadero
+        De Otro Modo:
+            validar_digito <- Falso
+    FinSegun
+FinFuncion
+
+
+Funcion validar_numero <- EsNumero(texto)
+    Definir i, cantidad_puntos Como Entero
+    Definir caracter Como Cadena
+	
+    validar_numero <- Verdadero
+    cantidad_puntos <- 0
+	
+    Si Longitud(texto) = 0 Entonces
+        validar_numero <- Falso
+    Sino
+        Para i <- 1 Hasta Longitud(texto) Hacer
+            caracter <- Subcadena(texto, i, i)
+			
+            Si caracter = "-" Entonces
+                Si i <> 1 O Longitud(texto) = 1 Entonces
+                    validar_numero <- Falso
+                FinSi
+            Sino
+                Si caracter = "." Entonces
+                    cantidad_puntos <- cantidad_puntos + 1
+                    Si cantidad_puntos > 1 Entonces
+                        validar_numero <- Falso
+                    FinSi
+                Sino
+                    Si EsDigito(caracter) = Falso Entonces
+                        validar_numero <- Falso
+                    FinSi
+                FinSi
+            FinSi
+        FinPara
+    FinSi
+FinFuncion
+
+
+Funcion numero <- SolicitarNumero(mensaje)
+    Definir entrada Como Cadena
+    Definir valido Como Logico
+	
+    valido <- Falso
+	
+    Mientras valido = Falso Hacer
+        Escribir Sin Saltar mensaje
+        Leer entrada
+		
+        Si EsNumero(entrada) Entonces
+            numero <- ConvertirANumero(entrada)
+            valido <- Verdadero
+        Sino
+            Escribir "Error: debe ingresar un valor numérico válido."
+        FinSi
+    FinMientras
+FinFuncion
+
+
+SubProceso MostrarAnalisis(primer_numero, operador, segundo_numero, resultado, umbral_analisis)
+    Definir tipo_resultado, tipo_numero, mensaje_umbral Como Cadena
+    Definir supera_umbral Como Logico
+	
+    Si resultado > 0 Entonces
+        tipo_resultado <- "Positivo"
+    Sino
+        Si resultado < 0 Entonces
+            tipo_resultado <- "Negativo"
+        Sino
+            tipo_resultado <- "Cero"
+        FinSi
+    FinSi
+	
+    Si trunc(resultado) = resultado Entonces
+        tipo_numero <- "Entero"
+    Sino
+        tipo_numero <- "Decimal"
+    FinSi
+	
+    supera_umbral <- resultado > umbral_analisis
+	
+    Si supera_umbral Entonces
+        mensaje_umbral <- "Sí, supera el umbral de " + ConvertirATexto(umbral_analisis) + "."
+    Sino
+        mensaje_umbral <- "No, no supera el umbral de " + ConvertirATexto(umbral_analisis) + "."
+    FinSi
+	
+    Escribir ""
+    Escribir "Resumen del cálculo:"
+    Escribir primer_numero, " ", operador, " ", segundo_numero, " = ", resultado
+    Escribir ""
+    Escribir "Tipo de resultado: ", tipo_resultado
+    Escribir "Clasificación numérica: ", tipo_numero
+    Escribir "¿Supera el umbral?: ", mensaje_umbral
+    Escribir ""
+FinSubProceso
+
+
+Algoritmo Calculadora_Basica_Con_Analisis
+	
+    Definir UMBRAL_ANALISIS, NUMERO_MAXIMO_PERMITIDO Como Entero
+    Definir nombre_usuario, operador Como Cadena
+    Definir opcion Como Entero
+    Definir primer_valor, segundo_valor, resultado Como Real
+    Definir nombre_valido, continuar_programa, operacion_valida Como Logico
+	
+    UMBRAL_ANALISIS <- 1000
+    NUMERO_MAXIMO_PERMITIDO <- 1000000
+	
+    nombre_valido <- Falso
+	
+    Mientras nombre_valido = Falso Hacer
+        Escribir "=============================================="
+        Escribir "        CALCULADORA BÁSICA EN PYTHON"
+        Escribir "=============================================="
+        Escribir Sin Saltar "Ingrese su nombre: "
+        Leer nombre_usuario
+		
+        Si nombre_usuario = "" Entonces
+            Escribir "Error: por favor, ingrese su nombre."
+        Sino
+            Si Longitud(nombre_usuario) < 5 Entonces
+                Escribir "Error: el nombre debe tener mínimo 5 caracteres."
+            Sino
+                Si Longitud(nombre_usuario) > 25 Entonces
+                    Escribir "Error: el nombre no debe superar los 25 caracteres."
+                Sino
+                    nombre_valido <- Verdadero
+                FinSi
+            FinSi
+        FinSi
+		
+        Escribir ""
+    FinMientras
+	
+    continuar_programa <- Verdadero
+	
+    Mientras continuar_programa Hacer
+        Escribir "Hola, ", nombre_usuario
+        Escribir "----------------------------------------------"
+        Escribir "Seleccione una operación:"
+        Escribir "1. Suma"
+        Escribir "2. Resta"
+        Escribir "3. Multiplicación"
+        Escribir "4. División"
+        Escribir "5. Salir"
+        Escribir "----------------------------------------------"
+        Escribir Sin Saltar "Ingrese una opción: "
+        Leer opcion
+		
+        Si opcion >= 1 Y opcion <= 4 Entonces
+			
+            primer_valor <- SolicitarNumero("Ingrese el primer número: ")
+            segundo_valor <- SolicitarNumero("Ingrese el segundo número: ")
+			
+            operacion_valida <- Verdadero
+			
+            Segun opcion Hacer
+                1:
+                    operador <- "+"
+                    resultado <- primer_valor + segundo_valor
+                2:
+                    operador <- "-"
+                    resultado <- primer_valor - segundo_valor
+                3:
+                    operador <- "*"
+                    resultado <- primer_valor * segundo_valor
+                4:
+                    operador <- "/"
+                    Si segundo_valor = 0 Entonces
+                        Escribir ""
+                        Escribir "Error: no se puede dividir para cero."
+                        Escribir ""
+                        operacion_valida <- Falso
+                    Sino
+                        resultado <- primer_valor / segundo_valor
+                    FinSi
+            FinSegun
+			
+            Si operacion_valida Entonces
+                Si Abs(resultado) > NUMERO_MAXIMO_PERMITIDO Entonces
+                    Escribir ""
+                    Escribir "Error: ha excedido el número máximo permitido (", NUMERO_MAXIMO_PERMITIDO, ")."
+                    Escribir ""
+                Sino
+                    Escribir ""
+                    Escribir "Resultado: ", resultado
+                    MostrarAnalisis(primer_valor, operador, segundo_valor, resultado, UMBRAL_ANALISIS)
+                FinSi
+            FinSi
+			
+        Sino
+            Si opcion = 5 Entonces
+                continuar_programa <- Falso
+                Escribir ""
+                Escribir "Gracias por utilizar la calculadora."
+            Sino
+                Escribir ""
+                Escribir "Error: opción no válida. Intente nuevamente."
+                Escribir ""
+            FinSi
+        FinSi
+		
+    FinMientras
+
+FinAlgoritmo
