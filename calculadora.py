@@ -1,6 +1,6 @@
 # **********************************************************************************************
 # Calculadora básica con interfaz gráfica en Python
-# Solicita dos o más números, valida la entrada, realiza una determinada operación aritmética
+# Solicita dos números, valida la entrada, realiza una determinada operación aritmética
 # y finalmente muestra un análisis a partir del resultado obtenido
 # **********************************************************************************************
 

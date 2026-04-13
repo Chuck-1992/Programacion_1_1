@@ -1,1 +1,1 @@
-"# Programacion_1_1" 
+"Calculadora básica con interfaz gráfica en Python" 
